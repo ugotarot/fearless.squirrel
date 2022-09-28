@@ -14,5 +14,8 @@ function update()
         player1.decelerate(moveDistance);
 
     player1.move();
+    ennemy1.move();
+    ennemy1.turnRight(rotateAngle);
     controls.update();
+
 }

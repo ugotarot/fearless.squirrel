@@ -28,6 +28,15 @@ function shoot()
     {
         player1.bullets[i].position.x += moveDistance * Math.cos(player1.bullets[i].angle);
         player1.bullets[i].position.y += moveDistance * Math.sin(player1.bullets[i].angle);
+        if (player1.bullets[i].position.x > ennemy1.graphic.position.x - 10 &&
+            player1.bullets[i].position.x < ennemy1.graphic.position.x + 10 &&
+            player1.bullets[i].position.y > ennemy1.graphic.position.y - 10 &&
+            player1.bullets[i].position.y < ennemy1.graphic.position.y + 10)
+        {
+            scene.remove(ennemy1.graphic);
+            scene.remove(player1.bullets[i]);
+        }
+        
     }
 
 }
@@ -36,7 +45,7 @@ function collisions()
 {
     bullet_collision();
     player_collision();
-    player_falling();
+    //player_falling();
 }
 
 function bullet_collision()
@@ -57,18 +66,35 @@ function bullet_collision()
 
 function player_collision()
 {
-    //collision between player and walls
+    //collision between player and walls and ennemies
     var x = player1.graphic.position.x + WIDTH / 2;
     var y = player1.graphic.position.y + HEIGHT / 2;
 
+    // walls collision
+    if (x < 0)
+        player1.graphic.position.x -= x;
     if ( x > WIDTH )
-        player1.graphic.position.x -= x - WIDTH;
+        player1.graphic.position.x = x - WIDTH;
     if ( y < 0 )
         player1.graphic.position.y -= y;
     if ( y > HEIGHT )
         player1.graphic.position.y -= y - HEIGHT;
 
+    //collision with ennemies
+    if ( x > ennemy1.graphic.position.x + WIDTH / 2 - 10 &&
+        x < ennemy1.graphic.position.x + WIDTH / 2 + 10 &&
+        y > ennemy1.graphic.position.y + HEIGHT / 2 - 10 &&
+        y < ennemy1.graphic.position.y + HEIGHT / 2 + 10)
+    {
+        player1.graphic.life -= 1;
+        if (player1.graphic.life == 0){
+            player1.dead();
+        }
+    }
+
 }
+
+
 
 function player_falling()
 {
